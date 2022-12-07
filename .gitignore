@@ -1,6 +1,5 @@
 *.egg-info
 *.pyc
 /.env
-/support
 **/.pytest_cache
 /.idea

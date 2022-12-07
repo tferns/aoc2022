@@ -1,0 +1,36 @@
+name: Tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10.x
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+    - name: Run PyTest
+      run: |
+        run_pytest() {
+          dir_range=()
+          for i in {01..25}; do
+            if [ -d "day$i" ]; then
+              if [ -f "day$i/part1.py" ]; then
+                dir_range+=("day$i/part1.py")
+              fi
+              if [ -f "day$i/part2.py" ]; then
+                dir_range+=("day$i/part2.py")
+              fi
+            fi
+          done
+          if [ ${#dir_range[@]} -gt 0 ]; then
+            pytest ${dir_range[@]}
+          fi
+        }
+        run_pytest
