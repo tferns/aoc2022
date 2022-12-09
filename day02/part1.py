@@ -9,7 +9,7 @@ import support
 
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
-SCORE_MAP = {'X': 1, 'Y': 2, 'Z': 3, }
+SCORE_MAP = {'X': 1, 'Y': 2, 'Z': 3}
 
 WIN_MAP = {'X': 'C', 'Y': 'A', 'Z': 'B'}
 DRAW_MAP = {'X': 'A', 'Y': 'B', 'Z': 'C'}

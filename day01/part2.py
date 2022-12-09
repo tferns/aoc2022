@@ -11,8 +11,8 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
 def compute(s: str) -> int:
-    elves = s.split("\n\n")
-    elves_totals = [sum([int(y) for y in x.split("\n") if y]) for x in elves]
+    elves = s.split('\n\n')
+    elves_totals = [sum([int(y) for y in x.split('\n') if y]) for x in elves]
     top3 = sorted(elves_totals)[-3:]
     return sum(top3)
 

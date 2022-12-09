@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import argparse
 import os.path
-from typing import Optional, List
+from dataclasses import dataclass
+from dataclasses import field
 
 import pytest
-from dataclasses import dataclass, field
 
 import support
 
@@ -14,14 +14,14 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
 @dataclass
-class Dir(object):
+class Dir:
     name: str
-    parent: Optional['Dir'] = None
-    dirs: List['Dir'] = field(default_factory=list)
-    files: List['File'] = field(default_factory=list)
+    parent: Dir | None = None
+    dirs: list[Dir] = field(default_factory=list)
+    files: list[File] = field(default_factory=list)
 
     def find_size(self) -> int:
-        return sum(f.size for f in self.files) + sum(d.find_size() for d in self.dirs)
+        return sum(f.size for f in self.files) + sum(d.find_size() for d in self.dirs)  # noqa
 
     def get_full_path(self) -> str:
         path = self.name
@@ -38,7 +38,7 @@ class Dir(object):
 
 
 @dataclass
-class File(object):
+class File:
     name: str
     size: int
 
@@ -64,7 +64,9 @@ def compute(s: str) -> int:
                 current_dir = current_dir.parent
             else:
                 _, dir_name = line.split('$ cd ')
-                current_dir = next(d for d in current_dir.dirs if d.name == dir_name)
+                current_dir = next(
+                    d for d in current_dir.dirs if d.name == dir_name
+                )
         elif in_ls:
             a, b = line.split()
             if a == 'dir':
@@ -75,7 +77,9 @@ def compute(s: str) -> int:
                 current_dir.files.append(File(name=filename, size=int(size)))
 
     all_dirs_size = root.get_dirs_to_size_map({})
-    dirs_below_threshold = (v for _, v in all_dirs_size.items() if v <= MAX_DIR_SIZE)
+    dirs_below_threshold = (
+        v for _, v in all_dirs_size.items() if v <= MAX_DIR_SIZE
+    )
     return sum(dirs_below_threshold)
 
 
@@ -110,7 +114,7 @@ EXPECTED = 95437
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-            (INPUT_S, EXPECTED),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:

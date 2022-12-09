@@ -10,8 +10,8 @@ import support
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
-def compute(s: str) -> int:
-    crates, instructions = s.split("\n\n")
+def compute(s: str) -> str:
+    crates, instructions = s.split('\n\n')
 
     crates_lines = crates.splitlines()
     crates_indexes = [int(c) for c in crates_lines.pop().split()]
@@ -32,30 +32,30 @@ def compute(s: str) -> int:
         for _ in range(int(amount)):
             crates[cto_idx] += crates[cfrom_idx].pop()
 
-    return "".join([c[-1] for c in crates])
+    return ''.join([c[-1] for c in crates])
 
 
 INPUT_S = '''\
-    [D]    
-[N] [C]    
+    [D]
+[N] [C]
 [Z] [M] [P]
- 1   2   3 
+ 1   2   3
 
 move 1 from 2 to 1
 move 3 from 1 to 3
 move 2 from 2 to 1
 move 1 from 1 to 2
 '''
-EXPECTED = "CMZ"
+EXPECTED = 'CMZ'
 
 
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-            (INPUT_S, EXPECTED),
+        (INPUT_S, EXPECTED),
     ),
 )
-def test(input_s: str, expected: int) -> None:
+def test(input_s: str, expected: str) -> None:
     assert compute(input_s) == expected
 
 

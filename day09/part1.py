@@ -11,13 +11,7 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
 def is_tail_touching(head, tail):
-    head_x, head_y = head
-    tail_x, tail_y = tail
-    return abs(head_x - tail_x) <= 1 and abs(head_y - tail_y) <= 1
-
-
-def sum_tuples(a, b):
-    return tuple(x + y for x, y in zip(a, b))
+    return abs(head[0] - tail[0]) <= 1 and abs(head[1] - tail[1]) <= 1
 
 
 def compute(s: str) -> int:
@@ -34,13 +28,13 @@ def compute(s: str) -> int:
         for _ in range(amount):
             old_head = head
             if direction == 'L':
-                head = sum_tuples(head, (-1, 0))
+                head = head[0] - 1, head[1]
             elif direction == 'R':
-                head = sum_tuples(head, (1, 0))
+                head = head[0] + 1, head[1]
             elif direction == 'U':
-                head = sum_tuples(head, (0, 1))
+                head = head[0], head[1] + 1
             elif direction == 'D':
-                head = sum_tuples(head, (0, -1))
+                head = head[0], head[1] - 1
 
             if not is_tail_touching(head, tail):
                 tail_visits.add(tail)
@@ -68,7 +62,7 @@ EXPECTED = 13
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-            (INPUT_S, EXPECTED),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:

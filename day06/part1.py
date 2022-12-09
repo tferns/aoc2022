@@ -31,10 +31,10 @@ EXPECTED = 7
     ('input_s', 'expected'),
     (
         (INPUT_S, EXPECTED),
-        ("bvwbjplbgvbhsrlpgdmjqwftvncz", 5),
-        ("nppdvjthqldpwncqszvftbrmjlhg", 6),
-        ("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 10),
-        ("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 11),
+        ('bvwbjplbgvbhsrlpgdmjqwftvncz', 5),
+        ('nppdvjthqldpwncqszvftbrmjlhg', 6),
+        ('nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg', 10),
+        ('zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw', 11),
     ),
 )
 def test(input_s: str, expected: int) -> None:

@@ -9,18 +9,20 @@ import support
 
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
-SCORE_MAP = {'X': 1, 'Y': 2, 'Z': 3, }
+SCORE_MAP = {'X': 1, 'Y': 2, 'Z': 3}
 
 WIN_MAP = {'X': 'C', 'Y': 'A', 'Z': 'B'}
 DRAW_MAP = {'X': 'A', 'Y': 'B', 'Z': 'C'}
 LOSE_MAP = {'X': 'B', 'Y': 'C', 'Z': 'A'}
 
-FLIP = lambda _dict: {v: k for k, v in _dict.items()}
+
+def FLIP(_dict): return {v: k for k, v in _dict.items()}
+
 
 PART_2_MAP = {
     'X': (FLIP(LOSE_MAP), 0),
     'Y': (FLIP(DRAW_MAP), 3),
-    'Z': (FLIP(WIN_MAP), 6)
+    'Z': (FLIP(WIN_MAP), 6),
 }
 
 
@@ -50,7 +52,7 @@ EXPECTED = 12
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-            (INPUT_S, EXPECTED),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:

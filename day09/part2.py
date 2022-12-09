@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 import os.path
+from dataclasses import dataclass
+from dataclasses import field
 
 import pytest
 
@@ -10,19 +12,47 @@ import support
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
-def is_tail_touching(head, tail):
-    head_x, head_y = head
-    tail_x, tail_y = tail
-    return abs(head_x - tail_x) <= 1 and abs(head_y - tail_y) <= 1
+@dataclass
+class Rope:
+    parts: list[RopePart] = field(default_factory=list)
+
+    @property
+    def head(self):
+        return self.parts[0]
+
+    @property
+    def tail(self):
+        return self.parts[-1]
 
 
-def sum_tuples(a, b):
-    return tuple(x + y for x, y in zip(a, b))
+@dataclass
+class RopePart:
+    x: int
+    y: int
+
+    def dist_x(self, other):
+        return abs(self.x - other.x)
+
+    def dist_y(self, other):
+        return abs(self.y - other.y)
+
+    def move_direction(self, direction: str):
+        if direction == 'L':
+            self.x -= 1
+        elif direction == 'R':
+            self.x += 1
+        elif direction == 'U':
+            self.y += 1
+        elif direction == 'D':
+            self.y -= 1
+
+    def as_tuple(self):
+        return self.x, self.y
 
 
 def compute(s: str) -> int:
-    head = [(0, 0) for _ in range(10)]
-    # tail = [(0, 0) for _ in range(10)]
+    parts = [RopePart(0, 0) for _ in range(10)]
+    rope = Rope(parts)
     tail_visits = {(0, 0)}
 
     lines = s.splitlines()
@@ -31,50 +61,27 @@ def compute(s: str) -> int:
         amount = int(amount)
 
         for _ in range(amount):
-            old_head = head[0]
-            if direction == 'L':
-                head[0] = sum_tuples(old_head, (-1, 0))
-            elif direction == 'R':
-                head[0] = sum_tuples(old_head, (1, 0))
-            elif direction == 'U':
-                head[0] = sum_tuples(old_head, (0, 1))
-            elif direction == 'D':
-                head[0] = sum_tuples(old_head, (0, -1))
+            rope.head.move_direction(direction)
 
-            # if not is_tail_touching(head, tail):
-            #     tail_visits.add(tail)
-            #     tail = old_head
+            for i in range(1, len(rope.parts)):
+                prior = rope.parts[i - 1]
+                current = rope.parts[i]
 
-            # for idx in range(0, len(head)):
-            for i in range(1, len(head)):
-                previous = prior_x, prior_y = head[i - 1]
-                current = curr_x, curr_y = head[i]
+                while current.dist_x(prior) > 1 or current.dist_y(prior) > 1:
 
-                distance_x = abs(curr_x - prior_x)
-                distance_y = abs(curr_y - prior_y)
-
-                while distance_x > 1 or distance_y > 1:
-
-                    if distance_x:
-                        if prior_x > curr_x:
-                            curr_x += 1
+                    if current.dist_x(prior) > 0:
+                        if prior.x > current.x:
+                            current.x += 1
                         else:
-                            curr_x -= 1
+                            current.x -= 1
 
-                    if distance_y:
-                        if prior_y > curr_y:
-                            curr_y += 1
+                    if current.dist_y(prior) > 0:
+                        if prior.y > current.y:
+                            current.y += 1
                         else:
-                            curr_y -= 1
+                            current.y -= 1
 
-                    # need to recalc these for the while loop
-                    distance_x = abs(curr_x - prior_x)
-                    distance_y = abs(curr_y - prior_y)
-
-                # head[i] = current
-                head[i] = curr_x, curr_y
-
-            tail_visits.add(head[-1])
+            tail_visits.add(rope.tail.as_tuple())
 
     return len(tail_visits)
 
@@ -95,7 +102,7 @@ EXPECTED = 36
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-            (INPUT_S, EXPECTED),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:

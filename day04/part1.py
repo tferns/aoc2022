@@ -15,8 +15,8 @@ def compute(s: str) -> int:
 
     lines = s.splitlines()
     for line in lines:
-        a, b = line.split(",")
-        a1, a2, b1, b2 = a.split("-") + b.split("-")
+        a, b = line.split(',')
+        a1, a2, b1, b2 = a.split('-') + b.split('-')
 
         if int(a1) <= int(b1) and int(a2) >= int(b2):
             score += 1
@@ -40,7 +40,7 @@ EXPECTED = 2
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-            (INPUT_S, EXPECTED),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:

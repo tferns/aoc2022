@@ -10,7 +10,7 @@ import support
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-PRIORITY = lambda letter: ALPHABET.index(letter) + 1
+def PRIORITY(letter): return ALPHABET.index(letter) + 1
 
 
 def compute(s: str) -> int:
@@ -40,7 +40,7 @@ EXPECTED = 70
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-            (INPUT_S, EXPECTED),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:
