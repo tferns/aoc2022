@@ -42,10 +42,10 @@ def compute(s: str) -> int:
 
 
 INPUT_S = '''\
-    [D]
-[N] [C]
+    [D]    
+[N] [C]    
 [Z] [M] [P]
- 1   2   3
+ 1   2   3 
 
 move 1 from 2 to 1
 move 3 from 1 to 3
