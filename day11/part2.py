@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import functools
 import os.path
 
 import pytest
@@ -11,7 +10,7 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 def compute(s: str) -> int:
     all_lines = [x for x in s.split('\n\n') if x]
-    group = 1  # all test divided multiplied
+    group = 1  # eventually becomes a valid value all can be divided by (or prod of all) # noqa
     monkeys = []
     for lines in all_lines:
         lines = lines.splitlines()
@@ -20,44 +19,33 @@ def compute(s: str) -> int:
             for x in lines[1].split(':')[1].split(',') if x
         ]
         operation = lines[2].split(': new = ')[1].strip()
-        test = lines[3].split(': divisible by ')[1].strip()
-        test = int(test)
-        group *= test
+        divisor = int(lines[3].split(': divisible by ')[1].strip())
+        group *= divisor
         if_true = int(lines[4].split(': throw to monkey')[1].strip())
-        if_true = int(if_true)
         if_false = int(lines[5].split(': throw to monkey')[1].strip())
-        if_false = int(if_false)
-        monkeys.append([items, operation, test, if_true, if_false])
+        monkeys.append([items, operation, divisor, if_true, if_false])
 
-    monkey_totals = {0: 0, 1: 0, 2: 0, 3: 0}
-    for i in range(10_000):
+    monkey_totals = [0] * len(monkeys)
+    for _ in range(10_000):
         for idx in range(len(monkeys)):
-            monkey = monkeys[idx]
-            items, operation, test, if_true, if_false = monkey
+            items, operation, divisor, if_true, if_false = monkeys[idx]
             to_pop = []
             for index in range(len(items)):
-                item = items[index]
                 monkey_totals[idx] += 1
-                old = item
+                old = items[index]  # noqa (used in eval)
                 result = int(eval(operation))
                 result %= group
-                new_test = int(result) % test
-                if new_test == 0:
+                if result % divisor == 0:
                     monkeys[if_true][0].append(result)
-                    to_pop.append(index)
                 else:
                     monkeys[if_false][0].append(result)
-                    to_pop.append(index)
-            popped = 0
-            for index in sorted(to_pop):
-                monkeys[idx][0].pop(index - popped)
-                popped += 1
+                to_pop.append(index)
+            for index in sorted(to_pop, reverse=True):
+                monkeys[idx][0].pop(index)
 
-    monkey_totals = sorted(
-        monkey_totals.items(),
-        key=lambda x: x[1], reverse=True,
-    )
-    return monkey_totals[0][1] * monkey_totals[1][1]
+    monkey_totals = sorted(monkey_totals, reverse=True)
+
+    return monkey_totals[0] * monkey_totals[1]
 
 
 INPUT_S = '''\
