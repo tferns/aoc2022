@@ -16,15 +16,14 @@ def compute(s: str) -> int:
     allpaths = []
     for line in lines:
         path = []
-        coords = line.split(" -> ")
+        coords = line.split(' -> ')
         for coord in coords:
-            x, y = coord.split(",")
+            x, y = coord.split(',')
             x = int(x)
             y = int(y)
             path.append((x, y))
         allpaths.append(path)
 
-    # for line in lines, draw each line
     fullpaths = set()
     for path in allpaths:
         for i in range(1, len(path)):
@@ -84,7 +83,7 @@ def compute(s: str) -> int:
             grid[sand_y][sand_x] = '~'
             sand_x, sand_y = ss_x - min_x, ss_y
 
-    raise Exception("shouldn't get here")
+    raise ValueError("shouldn't get here")
 
 
 INPUT_S = '''\
@@ -97,7 +96,7 @@ EXPECTED = 24
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-            (INPUT_S, EXPECTED),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:

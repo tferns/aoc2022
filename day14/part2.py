@@ -17,9 +17,9 @@ def compute(s: str) -> int:
     allpaths = []
     for line in lines:
         path = []
-        coords = line.split(" -> ")
+        coords = line.split(' -> ')
         for coord in coords:
-            x, y = coord.split(",")
+            x, y = coord.split(',')
             x = int(x)
             y = int(y)
             path.append((x, y))
@@ -46,8 +46,6 @@ def compute(s: str) -> int:
                     for x in range(x2, x1 + 1):
                         fullpaths.add((x, y1))
             fullpaths.add((x2, y2))
-
-
 
     max_y = max([y for x, y in fullpaths])
     max_x = max([x for x, y in fullpaths])
@@ -82,8 +80,10 @@ def compute(s: str) -> int:
 
         if sand_x == ss_x - min_x and sand_y == ss_y:
             found = True
-            for x, y in [(sand_x, sand_y), (sand_x, sand_y+1),
-                         (sand_x-1, sand_y+1), (sand_x+1, sand_y+1)]:
+            for x, y in [
+                (sand_x, sand_y), (sand_x, sand_y+1),
+                (sand_x-1, sand_y+1), (sand_x+1, sand_y+1),
+            ]:
                 if grid[y][x] != '◻':
                     found = False
 
@@ -102,7 +102,7 @@ def compute(s: str) -> int:
             grid[sand_y][sand_x] = '◻'
             sand_x, sand_y = ss_x - min_x, ss_y
 
-    raise Exception("No solution found")
+    raise ValueError('No solution found')
 
 
 INPUT_S = '''\
@@ -115,7 +115,7 @@ EXPECTED = 93
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-            (INPUT_S, EXPECTED),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:
