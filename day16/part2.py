@@ -88,8 +88,10 @@ def compute(s: str) -> int:
                 if p2f > 0:
                     if p2 not in unique_ovalves:
                         unique_ovalves |= {p2}
-                        new_score = score + sum(rates[l]
-                                                for l in unique_ovalves)
+                        new_score = score + sum(
+                            rates[l]
+                            for l in unique_ovalves
+                        )
                         new_state = letter, p2, minute + \
                             1, new_score, tuple(unique_ovalves)
                         all_states.append(new_state)
